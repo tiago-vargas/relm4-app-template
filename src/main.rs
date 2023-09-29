@@ -11,25 +11,25 @@ struct AppModel {}
 #[derive(Debug)]
 enum AppInput {}
 
-struct AppWidgets {}
-
+#[relm4::component]
 impl SimpleComponent for AppModel {
     type Init = ();
 
     type Input = AppInput;
     type Output = ();
 
-    /// The root GTK widget that this component will create.
-    type Root = gtk::Window;
+    view! {
+        gtk::Window {
+            set_title: Some("Template"),
+            set_default_width: 600,
+            set_default_height: 300,
 
-    type Widgets = AppWidgets;
-
-    fn init_root() -> Self::Root {
-        gtk::Window::builder()
-            .title("Template")
-            .default_width(600)
-            .default_height(300)
-            .build()
+            gtk::Label {
+                set_label: "Hello, World!",
+                set_margin_all: 4,
+                set_css_classes: &["title-1"],
+            }
+        }
     }
 
     /// Initialize the UI and model.
@@ -40,16 +40,7 @@ impl SimpleComponent for AppModel {
     ) -> ComponentParts<Self> {
         let model = AppModel {};
 
-        let label = gtk::Label::builder()
-            .label("Hello, World!")
-            .css_classes(["title-1"])
-            .build();
-
-        label.set_margin_all(4);
-
-        window.set_child(Some(&label));
-
-        let widgets = AppWidgets {};
+        let widgets = view_output!();
 
         ComponentParts { model, widgets }
     }
@@ -57,7 +48,4 @@ impl SimpleComponent for AppModel {
     fn update(&mut self, message: Self::Input, _sender: ComponentSender<Self>) {
         match message {}
     }
-
-    /// Update the view to represent the updated model.
-    fn update_view(&self, _widgets: &mut Self::Widgets, _sender: ComponentSender<Self>) {}
 }
