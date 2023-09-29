@@ -24,6 +24,7 @@ impl SimpleComponent for ContentModel {
             set_label: "Hello, World!",
             set_margin_all: 4,
             set_css_classes: &["title-1"],
+            set_vexpand: true,
         }
     }
 

@@ -18,12 +18,18 @@ impl SimpleComponent for AppModel {
     type Output = ();
 
     view! {
-        gtk::Window {
+        adw::ApplicationWindow {
             set_title: Some(todo!("Set window title")),
             set_default_width: 600,
             set_default_height: 300,
 
-            model.content.widget(),
+            gtk::Box {
+                set_orientation: gtk::Orientation::Vertical,
+
+                adw::HeaderBar,
+
+                model.content.widget(),
+            }
         }
     }
 
