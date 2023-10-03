@@ -1,7 +1,11 @@
 use gtk::prelude::*;
 use relm4::prelude::*;
 
-pub(crate) struct AppModel;
+mod content;
+
+pub(crate) struct AppModel {
+    content: Controller<content::ContentModel>,
+}
 
 #[derive(Debug)]
 pub(crate) enum AppInput {}
@@ -19,11 +23,7 @@ impl SimpleComponent for AppModel {
             set_default_width: 600,
             set_default_height: 300,
 
-            gtk::Label {
-                set_label: "Hello, World!",
-                set_margin_all: 4,
-                set_css_classes: &["title-1"],
-            }
+            model.content.widget(),
         }
     }
 
@@ -33,7 +33,10 @@ impl SimpleComponent for AppModel {
         window: &Self::Root,
         _sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
-        let model = AppModel {};
+        let content = content::ContentModel::builder()
+            .launch(content::ContentInit)
+            .detach();
+        let model = AppModel { content };
 
         let widgets = view_output!();
 
