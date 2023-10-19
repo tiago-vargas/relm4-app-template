@@ -27,6 +27,7 @@ impl SimpleComponent for AppModel {
             set_title: Some("Template"),  // TODO: Set window title
             set_default_width: 600,
             set_default_height: 300,
+            add_css_class: "devel",
 
             gtk::Box {
                 set_orientation: gtk::Orientation::Vertical,
