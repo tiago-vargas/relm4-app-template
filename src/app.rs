@@ -12,12 +12,15 @@ pub(crate) struct AppModel {
 #[derive(Debug)]
 pub(crate) enum AppInput {}
 
+#[derive(Debug)]
+pub(crate) enum AppOutput {}
+
 #[relm4::component(pub(crate))]
 impl SimpleComponent for AppModel {
     type Init = ();
 
     type Input = AppInput;
-    type Output = ();
+    type Output = AppOutput;
 
     view! {
         adw::ApplicationWindow {
