@@ -21,7 +21,7 @@ impl SimpleComponent for AppModel {
 
     view! {
         adw::ApplicationWindow {
-            set_title: Some(todo!("Set window title")),
+            set_title: Some("Template"),  // TODO: Set window title
             set_default_width: 600,
             set_default_height: 300,
 
