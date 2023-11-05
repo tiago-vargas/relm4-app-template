@@ -3,6 +3,8 @@ use relm4::prelude::*;
 
 mod content;
 
+pub(crate) const APP_ID: &str = "set.your.app_id";  // TODO: Set app ID
+
 pub(crate) struct AppModel {
     content: Controller<content::ContentModel>,
 }
