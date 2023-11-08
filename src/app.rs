@@ -2,8 +2,11 @@ use gtk::prelude::*;
 use relm4::prelude::*;
 
 mod content;
+mod settings;
 
-pub(crate) const APP_ID: &str = "set.your.app_id";  // TODO: Set app ID
+use settings::Settings;
+
+pub(crate) const APP_ID: &str = "your.app_id";  // TODO: Set app ID
 
 pub(crate) struct AppModel {
     content: Controller<content::ContentModel>,
@@ -25,8 +28,9 @@ impl SimpleComponent for AppModel {
     view! {
         adw::ApplicationWindow {
             set_title: Some("Template"),  // TODO: Set window title
-            set_default_width: 600,
-            set_default_height: 300,
+            set_default_width: settings.int(Settings::WindowWidth.as_str()),
+            set_default_height: settings.int(Settings::WindowHeight.as_str()),
+            set_maximized: settings.boolean(Settings::WindowMaximized.as_str()),
             add_css_class: "devel",
 
             gtk::Box {
@@ -45,6 +49,8 @@ impl SimpleComponent for AppModel {
         window: &Self::Root,
         _sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
+        let settings = gtk::gio::Settings::new(APP_ID);
+
         let content = content::ContentModel::builder()
             .launch(content::ContentInit)
             .detach();
