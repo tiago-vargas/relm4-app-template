@@ -8,7 +8,7 @@
 			"name": "Debug Rust Application",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/target/debug/relm4-app-template",
+			"program": "${workspaceFolder}/target/debug/relm4-app-template",  // TODO: Use your app name
 			"args": [],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
