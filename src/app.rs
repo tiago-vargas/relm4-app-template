@@ -26,7 +26,7 @@ impl SimpleComponent for AppModel {
     type Output = AppOutput;
 
     view! {
-        adw::ApplicationWindow {
+        main_window = adw::ApplicationWindow {
             set_title: Some("Template"),  // TODO: Set window title
             set_default_width: settings.int(Settings::WindowWidth.as_str()),
             set_default_height: settings.int(Settings::WindowHeight.as_str()),
@@ -63,5 +63,24 @@ impl SimpleComponent for AppModel {
 
     fn update(&mut self, message: Self::Input, _sender: ComponentSender<Self>) {
         match message {}
+    }
+
+    fn shutdown(&mut self, widgets: &mut Self::Widgets, _output: relm4::Sender<Self::Output>) {
+        Self::save_window_state(&widgets);
+    }
+}
+
+impl AppModel {
+    fn save_window_state(widgets: &<Self as SimpleComponent>::Widgets) {
+        let settings = gtk::gio::Settings::new(APP_ID);
+
+        let (width, height) = widgets.main_window.default_size();
+        let _ = settings.set_int(settings::Settings::WindowWidth.as_str(), width);
+        let _ = settings.set_int(settings::Settings::WindowHeight.as_str(), height);
+
+        let _ = settings.set_boolean(
+            settings::Settings::WindowMaximized.as_str(),
+            widgets.main_window.is_maximized(),
+        );
     }
 }
