@@ -109,7 +109,13 @@ impl SimpleComponent for AppModel {
                 help_window.widget().present();
             }
             Self::Input::ShowAboutWindow => {
+                let app = relm4::main_application();
+                let main_window = app.windows().first()
+                    .expect("Event should have been triggered by last focused window, thus first item")
+                    .clone();
+
                 let about_window = about::Model::builder()
+                    .transient_for(&main_window)
                     .launch(about::Init)
                     .detach();
                 about_window.widget().present();

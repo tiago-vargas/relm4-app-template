@@ -18,10 +18,13 @@ impl SimpleComponent for Model {
     type Output = Output;
 
     view! {
-        adw::Window {
-            set_title: Some("About"),
+        adw::AboutWindow {
+            set_application_icon: "application-x-executable-symbolic",  // TODO: Set app icon
+            set_application_name: "Template",  // TODO: Set app name
+            set_developer_name: "Someone",  // TODO: Set developer name
+            set_version: "0.1.0",  // TODO: Set version
 
-            adw::HeaderBar,
+            set_website: "https://github.com/tiago-vargas/relm4-app-template",  // TODO: Set website
         }
     }
 
