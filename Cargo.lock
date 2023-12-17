@@ -811,6 +811,7 @@ dependencies = [
 name = "relm4-app-template"
 version = "0.1.0"
 dependencies = [
+ "libadwaita",
  "relm4",
  "relm4-components",
 ]
