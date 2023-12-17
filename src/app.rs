@@ -38,7 +38,6 @@ impl SimpleComponent for AppModel {
         }
     }
 
-    /// Initialize the UI and model.
     fn init(
         _init: Self::Init,
         window: &Self::Root,
