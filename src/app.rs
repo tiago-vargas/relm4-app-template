@@ -64,29 +64,3 @@ impl SimpleComponent for AppModel {
         Self::save_window_state(&widgets);
     }
 }
-
-impl AppModel {
-    fn save_window_state(widgets: &<Self as SimpleComponent>::Widgets) {
-        let settings = gtk::gio::Settings::new(APP_ID);
-
-        let (width, height) = widgets.main_window.default_size();
-        let _ = settings.set_int(settings::Settings::WindowWidth.as_str(), width);
-        let _ = settings.set_int(settings::Settings::WindowHeight.as_str(), height);
-
-        let _ = settings.set_boolean(
-            settings::Settings::WindowMaximized.as_str(),
-            widgets.main_window.is_maximized(),
-        );
-    }
-
-    fn load_window_state(widgets: &<Self as SimpleComponent>::Widgets) {
-        let settings = gtk::gio::Settings::new(APP_ID);
-
-        let width = settings.int(settings::Settings::WindowWidth.as_str());
-        let height = settings.int(settings::Settings::WindowHeight.as_str());
-        widgets.main_window.set_default_size(width, height);
-
-        let maximized = settings.boolean(settings::Settings::WindowMaximized.as_str());
-        widgets.main_window.set_maximized(maximized);
-    }
-}
