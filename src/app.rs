@@ -4,8 +4,6 @@ use relm4::prelude::*;
 mod content;
 mod settings;
 
-use settings::Settings;
-
 pub(crate) const APP_ID: &str = "your.app_id";  // TODO: Set app ID
 
 pub(crate) struct AppModel {
@@ -28,9 +26,6 @@ impl SimpleComponent for AppModel {
     view! {
         main_window = adw::ApplicationWindow {
             set_title: Some("Template"),  // TODO: Set window title
-            set_default_width: settings.int(Settings::WindowWidth.as_str()),
-            set_default_height: settings.int(Settings::WindowHeight.as_str()),
-            set_maximized: settings.boolean(Settings::WindowMaximized.as_str()),
             add_css_class: "devel",
 
             gtk::Box {
@@ -49,14 +44,14 @@ impl SimpleComponent for AppModel {
         window: &Self::Root,
         _sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
-        let settings = gtk::gio::Settings::new(APP_ID);
-
         let content = content::ContentModel::builder()
             .launch(content::ContentInit)
             .detach();
         let model = AppModel { content };
 
         let widgets = view_output!();
+
+        Self::load_window_state(&widgets);
 
         ComponentParts { model, widgets }
     }
@@ -82,5 +77,16 @@ impl AppModel {
             settings::Settings::WindowMaximized.as_str(),
             widgets.main_window.is_maximized(),
         );
+    }
+
+    fn load_window_state(widgets: &<Self as SimpleComponent>::Widgets) {
+        let settings = gtk::gio::Settings::new(APP_ID);
+
+        let width = settings.int(settings::Settings::WindowWidth.as_str());
+        let height = settings.int(settings::Settings::WindowHeight.as_str());
+        widgets.main_window.set_default_size(width, height);
+
+        let maximized = settings.boolean(settings::Settings::WindowMaximized.as_str());
+        widgets.main_window.set_maximized(maximized);
     }
 }
