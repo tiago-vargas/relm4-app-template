@@ -14,11 +14,12 @@ fn main() {
 
 fn build_for_debug() {
     install_gschema();
+    // install_icons();
 }
 
 fn build_for_release() {
     install_gschema();
-    // copy_icons();
+    install_icons();
     install_desktop_file();
 }
 
@@ -66,21 +67,28 @@ fn compile_schemas(location: &str) {
     println!("Compiling schemas: {status}");
 }
 
-// fn copy_icons() {
-//     let icons_path = "data/icons/";
-//     // "~/.local/share/icons/hicolor/scalable/apps/",
-//     // "~/.local/share/icons/hicolor/symbolic/apps/",
+fn install_icons() {
+    let symbolic_icons = format!("{HOME}/data/icons/hicolor/symbolic/apps/");
+    let destination = format!("{HOME}/.local/share/icons/hicolor/symbolic/apps/");
+    copy_icons(&symbolic_icons, &destination);
 
-//     let status = Command::new("cp")
-//         .args(&[
-//             icons_path,
-//             &format!("{HOME}/.local/share/icons/hicolor/scalable/apps/"),
-//         ])
-//         .status()
-//         .expect("Should be able to copy icons");
+    let scalable_icons = format!("{HOME}/data/icons/hicolor/scalable/apps/");
+    let destination = format!("{HOME}/.local/share/icons/hicolor/scalable/apps/");
+    copy_icons(&scalable_icons, &destination);
+}
 
-//     println!("Copying icons: {status}");
-// }
+fn copy_icons(source: &str, destination: &str) {
+    let status = Command::new("rsync")
+        .args(&[
+            source,
+            destination,
+            "--archive",
+        ])
+        .status()
+        .expect("Should be able to copy icons");
+
+    println!("Copying icons: {status}");
+}
 
 fn install_desktop_file() {
     let desktop_file = format!("data/{APP_ID}.desktop");
