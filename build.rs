@@ -25,11 +25,14 @@ fn build_for_release() {
 
 fn install_gschema() {
     let gschema_file = format!("data/{APP_ID}.gschema.xml");
-    let destination = format!("{HOME}/.local/share/glib-2.0/schemas/");
-    create_directory_if_needed(&destination);
 
-    copy(&gschema_file, &destination);
-    compile_schemas(&destination);
+    let is_valid = validate_gschema("data/");
+    if is_valid {
+        let destination = format!("{HOME}/.local/share/glib-2.0/schemas/");
+        create_directory_if_needed(&destination);
+        copy(&gschema_file, &destination);
+        compile_schemas(&destination);
+    }
 
     println!("cargo:rerun-if-changed={gschema_file}");
 }
@@ -44,6 +47,21 @@ fn create_directory_if_needed(name: &str) {
         .expect("Should be able to create directory");
 
     println!("Creating directory: {status}");
+}
+
+fn validate_gschema(location: &str) -> bool {
+    let status = Command::new("glib-compile-schemas")
+        .args(&[
+            location,
+            "--strict",
+            "--dry-run",
+        ])
+        .status()
+        .expect("Should be able to validate schemas");
+
+    println!("Validating schemas: {status}");
+
+    status.success()
 }
 
 fn copy(source: &str, destination: &str) {
@@ -101,13 +119,27 @@ fn update_icon_cache(location: &str) {
 
 fn install_desktop_file() {
     let desktop_file = format!("data/{APP_ID}.desktop");
-    let destination = format!("{HOME}/.local/share/applications/");
-    create_directory_if_needed(&destination);
 
-    copy(&desktop_file, &destination);
-    update_desktop_databse(&destination);
+    let is_valid = validate_desktop_file(&desktop_file);
+    if is_valid {
+        let destination = format!("{HOME}/.local/share/applications/");
+        create_directory_if_needed(&destination);
+        copy(&desktop_file, &destination);
+        update_desktop_databse(&destination);
+    }
 
     println!("cargo:rerun-if-changed={desktop_file}");
+}
+
+fn validate_desktop_file(file: &str) -> bool {
+    let status = Command::new("desktop-file-validate")
+        .arg(file)
+        .status()
+        .expect("Should be able to validate desktop file");
+
+    println!("Validating desktop file: {status}");
+
+    status.success()
 }
 
 fn update_desktop_databse(location: &str) {
