@@ -14,7 +14,7 @@ fn main() {
 
 fn build_for_debug() {
     install_gschema();
-    // install_icons();
+    install_icons();
 }
 
 fn build_for_release() {
@@ -68,16 +68,13 @@ fn compile_schemas(location: &str) {
 }
 
 fn install_icons() {
-    let symbolic_icons = format!("{HOME}/data/icons/hicolor/symbolic/apps/");
-    let destination = format!("{HOME}/.local/share/icons/hicolor/symbolic/apps/");
-    copy_icons(&symbolic_icons, &destination);
-
-    let scalable_icons = format!("{HOME}/data/icons/hicolor/scalable/apps/");
-    let destination = format!("{HOME}/.local/share/icons/hicolor/scalable/apps/");
-    copy_icons(&scalable_icons, &destination);
+    let icons = format!("{HOME}/data/icons/hicolor");
+    let destination = format!("{HOME}/.local/share/icons/hicolor/");
+    copy_icons_and_create_path_if_needed(&icons, &destination);
+    update_icon_cache(&destination);
 }
 
-fn copy_icons(source: &str, destination: &str) {
+fn copy_icons_and_create_path_if_needed(source: &str, destination: &str) {
     let status = Command::new("rsync")
         .args(&[
             source,
@@ -88,6 +85,18 @@ fn copy_icons(source: &str, destination: &str) {
         .expect("Should be able to copy icons");
 
     println!("Copying icons: {status}");
+}
+
+fn update_icon_cache(location: &str) {
+    let status = Command::new("gtk-update-icon-cache")
+        .args(&[
+            location,
+            "--ignore-theme-index",
+        ])
+        .status()
+        .expect("Should be able to update icon cache");
+
+    println!("Updating icon cache: {status}");
 }
 
 fn install_desktop_file() {
