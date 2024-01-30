@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Relm4 App Template
+Exec=simple-relm4-todo
+Icon=com.github.tiago_vargas.relm4_app_template
+Terminal=false
+Type=Application
+Categories=Utility;
+StartupNotify=true
