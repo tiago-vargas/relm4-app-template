@@ -125,7 +125,7 @@ fn install_desktop_file() {
         let destination = format!("{HOME}/.local/share/applications/");
         create_directory_if_needed(&destination);
         copy(&desktop_file, &destination);
-        update_desktop_databse(&destination);
+        update_desktop_database(&destination);
     }
 
     println!("cargo:rerun-if-changed={desktop_file}");
@@ -142,8 +142,8 @@ fn validate_desktop_file(file: &str) -> bool {
     status.success()
 }
 
-fn update_desktop_databse(location: &str) {
-    let status = Command::new("update-desktop-databse")
+fn update_desktop_database(location: &str) {
+    let status = Command::new("update-desktop-database")
         .arg(location)
         .status()
         .expect("Should be able to update desktop database");
