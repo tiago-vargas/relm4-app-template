@@ -86,7 +86,7 @@ fn compile_schemas(location: &str) {
 }
 
 fn install_icons() {
-    let icons = format!("data/icons/hicolor");
+    let icons = format!("data/icons/hicolor/");
     let destination = format!("{HOME}/.local/share/icons/hicolor/");
     copy_icons_and_create_path_if_needed(&icons, &destination);
     update_icon_cache(&destination);
