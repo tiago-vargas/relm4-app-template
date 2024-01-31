@@ -1,6 +1,8 @@
 use adw::prelude::*;
 use relm4::prelude::*;
 
+use crate::app;
+
 pub(crate) struct Model;
 
 pub(crate) struct Init;
@@ -19,7 +21,7 @@ impl SimpleComponent for Model {
 
     view! {
         adw::AboutWindow {
-            set_application_icon: "application-x-executable-symbolic",  // TODO: Set app icon
+            set_application_icon: app::APP_ID,  // TODO: Set app icon if needed
             set_application_name: "Template",  // TODO: Set app name
             set_developer_name: "Someone",  // TODO: Set developer name
             set_version: "0.1.0",  // TODO: Set version
