@@ -1,6 +1,6 @@
 use std::{env, process::Command};
 
-const APP_ID: &str = "com.github.tiago_vargas.relm4_app_template";
+const APP_ID: &str = "com.github.tiago_vargas.relm4_app_template";  // TODO: Set app ID
 const HOME: &str = env!("HOME");
 
 fn main() {
